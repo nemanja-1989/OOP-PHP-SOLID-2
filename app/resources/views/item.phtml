@@ -1,0 +1,29 @@
+<?php
+use App\Classes\Items\ItemsGet;
+use App\Services\FastCacheService;
+use App\Services\RedisService;
+use App\Classes\Items\ClientItems;
+use App\Services\HttpService;
+?>
+<!DOCTYPE html>
+<head>
+    <title>Movie item</title>
+</head>
+<body>
+<?php
+    $item = new \App\Controllers\ItemsController(new RedisService, new FastCacheService, new ItemsGet(new ClientItems(new HttpService)));
+    $item = $item->getSingleItem($_GET['token']);
+?>
+        <?php if (!isset($item)): ?>
+            <b>No item found!</b>
+        <?php else: ?>
+            <div class="item">
+                <dl>
+                    <dt>ID: <dd><?php echo $item['id'] ?>
+                    <dt>Title: <dd><?php echo $item['title']?>
+                    <dt>Synopsis: <dd><?php echo $item['synopsis']?>
+                </dl>
+            </div>
+        <?php endif ?>
+</body>
+</html>
